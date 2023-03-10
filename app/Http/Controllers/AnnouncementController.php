@@ -38,11 +38,16 @@ class AnnouncementController extends Controller
 
     public function update($id)
     {
-        $announcement = Announcement::where('id', '=', $id)->first();
 
-        $announcement->update(['updated_time' => Carbon::now()]);
+        $announcement = Announcement::where('id', '=', $id)->first();
         $heading = Heading::find($announcement->heading_id)->name;
 
-        return redirect()->route('create', ['find_heading' => $heading]);
+        if(!Announcement::isDayPast($announcement->updated_time))
+        {
+            $announcement->update(['updated_time' => Carbon::now()]);
+            $message = 'success';
+        }
+        else { $message = 'failed'; }
+        return redirect()->route('create', ['find_heading' => $heading])->with($message);
     }
 }

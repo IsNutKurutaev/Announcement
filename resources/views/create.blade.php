@@ -1,6 +1,5 @@
 @extends('layout')
 @section('section')
-
     @foreach ($errors->all() as $error)
         <li>{{ $error }}</li>
     @endforeach
@@ -14,7 +13,7 @@
                     <span class="name">{{ $item->name }}</span>
                 </p>
                 <p> {{ $item->body }} </p>
-                <a href="{{ route('update', ['id' => $item->id]) }}" @class(['btn', 'btn-dark', 'disabled' => ((strtotime(\Carbon\Carbon::now()) - strtotime($item->updated_time)) < 86400)])>up</a>
+                <a href="{{ route('update', ['id' => $item->id]) }}" @class(['btn', 'btn-dark', 'disabled' => App\Models\Announcement::isDayPast($item->updated_time)])>up</a>
             </div>
         @endforeach
 
